@@ -1,50 +1,67 @@
-# React + TypeScript + Vite
+## Food Explorer
+### Technologies Used
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+* **React**: For building and managing the UI components efficiently.
 
-Currently, two official plugins are available:
+* **Tailwind CSS**: For rapid and consistent styling, ensuring a responsive design.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* **React Flow**: For creating and managing the node-based interface.
 
-## Expanding the ESLint configuration
+* **TypeScript**: For adding static typing, improving code quality and maintainability.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+* **TanStack Query**: For efficient data fetching and state management.
 
-- Configure the top-level `parserOptions` property like this:
+* **Class Variance Authority**: For dynamically managing class names in reusable components.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+* **Tailwind Merge**: For merging Tailwind CSS class names to avoid conflicts.
+
+* **Tabler Icons**: For providing a set of clean and modern icons.
+
+* **Vite**: For fast development and build processes, offering a modern alternative to traditional bundlers.
+
+### Features
+
+* **Initial Node**: The application starts with an "Explore" node centered on the screen.                           Clicking this node displays the top 5 meal categories.
+
+* **Category Selection**: Selecting a meal category node opens a "View Meals" node. Clicking on                           this node displays the top 5 meals filtered by the selected category.
+
+* **Meal Details**: Clicking on a meal node presents three options:
+    * **View Ingredients**:Opens a node showing up to 5 ingredients associated with the meal.
+    * **View Tags**: Opens a node displaying up to 5 tags associated with the meal.
+    * **View Details**: Opens a sidebar with detailed information about the meal, including   proper loading indicators.
+
+* **Dynamic Node Behavior**: Clicking on an already open node will close it. Clicking on a different node will close the currently open one and open the new node, ensuring a clear and organized view.This works level-wise—for example, if there are five categories and one is open, clicking on the same category will close it, while clicking on another will close the open category and open the new one.
+
+* **Loader Handling**:  A loader is omitted for node transitions to avoid negatively impacting user experience. If the API server fails or data fetching encounters issues, an error message will notify the user.
+
+* **Hover Highlighter**: Nodes are highlighted on hover for improved user interaction.
+
+* **Mobile Responsive**: Designed with Tailwind CSS to be fully responsive, ensuring usability across different devices.
+
+### Installation
+
+To run the project locally:
+
+Clone the project
+
+```bash
+  git clone https://github.com/Varun-Sangai/aurva.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Go to the project directory
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```bash
+  cd aurva
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
 ```
