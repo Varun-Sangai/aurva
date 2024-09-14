@@ -7,7 +7,7 @@ export function categoryOptions(options?: HTTPOptions) {
   return queryOptions({
     queryKey: ["categories"],
     queryFn: () => fetchCategories(options),
-    staleTime: 5 * 1000,
+    staleTime: 120*1000,
   });
 }
 
@@ -18,6 +18,6 @@ export const queryCategories = async () => {
     const data = await queryClient.fetchQuery(categoryOptions());
     return data;
   } catch (err) {
-    console.log(err);
+    throw "Error fetching categories!!";
   }
 };

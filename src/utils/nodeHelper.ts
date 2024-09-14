@@ -63,7 +63,7 @@ export const convertMealsToNodes = (meals?: PartialMeal[]): GraphNode[] => {
 export const generateTagNodes = (meal: Meal): GraphNode[] => {
   let tagNodes: GraphNode[] = [];
 
-  meal.strTags.split(",").map((tag, _index) => {
+  meal?.strTags?.split(",").map((tag, _index) => {
       tagCount += 1;
       tagNodes.push({
         id: tagId + ` ${tagCount} ` + `${meal.idMeal}`,

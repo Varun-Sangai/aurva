@@ -23,13 +23,13 @@ const router = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
+  <StrictMode>
     <QueryClientProvider client={queryClient}>
       <Toaster toastOptions={{
-        position:'top-right'
+        position:'top-center'
       }}
       ></Toaster>
       <RouterProvider router={router}></RouterProvider>
     </QueryClientProvider>
-  // </StrictMode>,
+  </StrictMode>,
 )

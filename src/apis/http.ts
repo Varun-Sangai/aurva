@@ -11,27 +11,19 @@ export const getURL = (url: string, options: {mockedURL?: string }) => {
 };
 
 
-//Custom Error Class
-export class ApiResponseError extends Error {
-  code = 400;
-
-  constructor(message: string, code = 400) {
-    super(message || 'Oops! Something went wrong');
-    this.name = 'ApiResponseError';
-    this.code = code;
-  }
-}
-
-
 /**
  * HTTP GET Request
  */
 const fetchGet= async<T> (url: string, options?: HTTPOptions) => {
+  try{
   const result = await axios.get(
     getURL(url, { mockedURL:options?.mockedURL || "" })
   );
     
   return result.data as T;
+  }catch(err){
+    throw err;
+  }
 }
 
 

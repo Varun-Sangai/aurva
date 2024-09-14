@@ -17,10 +17,9 @@ const IngredientNode = ({
         isConnectable={isConnectable}
         className="opacity-0"
       />
-      <div className="p-3 border-grey-300 shadow-lg  bg-white border-solid border-[0.125rem] min-w-28 max-w-80 flex gap-2 items-center rounded-md hover:!shadow-purple-200 hover:bg-purple-200 hover:!border-none transition-all ease-in-out duration-500">
+      <div className="p-3 border-grey-300 shadow-lg  bg-white border-solid border-[0.125rem] min-w-28 max-w-80 flex gap-2 items-center rounded-md hover:!shadow-purple-200/80 hover:bg-purple-100/50 hover:!border-purple-50/80 transition-all ease-in-out duration-500">
         <div className="p-1.5 rounded-md bg-purple-600">
-        {/* <IconSalad className="w-4 h-4 !text-white"></IconSalad> */}
-        <img src={ingredientSvg} className="w-4 h-4"></img>
+          <img src={ingredientSvg} className="w-4 h-4"></img>
         </div>
         <Typography variant={"h6"} fontWeight={500}>{data?.label as string}</Typography>
       </div>
