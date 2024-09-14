@@ -31,6 +31,7 @@
     * **View Details**: Opens a sidebar with detailed information about the meal, including   proper loading indicators.
 
 * **Dynamic Node Behavior**: Clicking on an already open node will close it. Clicking on a different node will close the currently open one and open the new node, ensuring a clear and organized view.This works level-wise—for example, if there are five categories and one is open, clicking on the same category will close it, while clicking on another will close the open category and open the new one.
+* **Focus on Node Flow**: When a new node opens, the focus shifts to that part of the UI, ensuring the user's attention is directed to the relevant information.
 
 * **Loader Handling**:  A loader is omitted for node transitions to avoid negatively impacting user experience. If the API server fails or data fetching encounters issues, an error message will notify the user.
 
