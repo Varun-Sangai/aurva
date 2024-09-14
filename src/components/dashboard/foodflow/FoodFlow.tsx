@@ -249,7 +249,6 @@ const FoodFlow = ({ toggleMeal }: { toggleMeal: (id?: string) => void }) => {
         onEdgesChange={onEdgesChange}
         onNodeClick={handleNodeClick}
         nodesDraggable={false}
-      // fitView
       >
         <Background></Background>
       </ReactFlow>

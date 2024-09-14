@@ -14,7 +14,7 @@ type SideMealDetailProps = {
 export default function MealDetail({ id, onClose }: SideMealDetailProps) {
 
     const meal = useMeal(id);
-    const loading = !Boolean(meal?.data);
+    const loading = meal?.isFetching;
     
     useEffect(()=>{
         if(meal?.error){
