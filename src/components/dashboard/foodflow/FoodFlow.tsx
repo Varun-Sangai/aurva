@@ -1,5 +1,5 @@
 import Dagre from '@dagrejs/dagre';
-import { useCallback, useEffect} from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   ReactFlow,
   useNodesState,
@@ -16,13 +16,13 @@ import { convertCategoriesToNodes, convertMealsToNodes, deleteNodesAndEdges, gen
 import CategoryNode from './nodes/CategoryNode.tsx';
 import ExploreNode from './nodes/ExploreNode.tsx';
 import MealNode from './nodes/MealNode.tsx';
-import { queryMeal, queryMealFilteredByCategory } from '../../../apis/queries/meals.queries.ts';
+import { queryMeal, queryMealFilteredByCategory, queryMealFilteredByIngredient } from '../../../apis/queries/meals.queries.ts';
 import ViewNode from './nodes/ViewNode.tsx';
 import TagNode from './nodes/TagNode.tsx';
 import IngredientNode from './nodes/IngredientNode.tsx';
 import React from 'react';
 import { isObjectInArrayByProperty } from '../../../utils/helper.ts';
-import { categoryId, exploreId, ingredientId, mealId, tagId, viewDetailId, viewIngredientId, viewMealId, viewTagId } from '../../../utils/config.ts';
+import { categoryId, exploreId, ingredientId, mealId, viewDetailId, viewIngredientId, viewMealId, viewTagId } from '../../../utils/config.ts';
 import { errorToast, warningToast } from '../../shared/Toasts.tsx';
 
 
@@ -58,14 +58,14 @@ const getLayoutedElements = (nodes: any, edges: any, options: any) => {
   };
 };
 
-const layoutedInitial=getLayoutedElements([
+const layoutedInitial = getLayoutedElements([
   {
     id: exploreId,
     data: { label: 'Explore' },
-    type:"explore",
+    type: "explore",
     position: { x: 0, y: 0 },
   },
-],[],{direction:'LR'});
+], [], { direction: 'LR' });
 
 const options = {
   includeHiddenNodes: true,
@@ -85,7 +85,7 @@ const FoodFlow = ({ toggleMeal }: { toggleMeal: (id?: string) => void }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<GraphNode>(layoutedInitial?.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedInitial?.edges);
   const nodesInitialized = useNodesInitialized(options);
-  
+
   useEffect(() => {
     const temp: GraphNode[] = [...nodes];
     let nodesToFocus: GraphNode[] = [...nodes];
@@ -169,31 +169,31 @@ const FoodFlow = ({ toggleMeal }: { toggleMeal: (id?: string) => void }) => {
             toggleMeal(undefined);
           }
         } else if (node.id.includes(mealId)) {
-          if (!isObjectInArrayByProperty(nodes, "id", viewIngredientId)) {
+          // if (!isObjectInArrayByProperty(nodes, "id", viewIngredientId)) {
             const temp: string[] = node.id.split(" ");
             const generalNodes = generateGeneralNodes(temp[temp.length - 1]);
             const generalEdges = generateEdges(node.id, generalNodes);
             updateNodesAndEdges([...nodes, ...generalNodes], [...edges, ...generalEdges])
-          } else {
-            if (isObjectInArrayByProperty(edges, "source", node.id)) {
-              const { newNodes: newNodes1, newEdges: newEdges1 } = deleteNodesAndEdges(edges, nodes, viewIngredientId);
-              const { newNodes: newNodes2, newEdges: newEdges2 } = deleteNodesAndEdges(newEdges1, newNodes1, viewTagId);
-              const { newNodes: newNodes3, newEdges: newEdges3 } = deleteNodesAndEdges(newEdges2, newNodes2, viewDetailId);
-              updateNodesAndEdges(newNodes3, newEdges3);
-              toggleMeal(undefined);
-            } else {
-              const { newNodes: newNodes1, newEdges: newEdges1 } = deleteNodesAndEdges(edges, nodes, viewIngredientId);
-              const { newNodes: newNodes2, newEdges: newEdges2 } = deleteNodesAndEdges(newEdges1, newNodes1, viewTagId);
-              const { newNodes: newNodes3, newEdges: newEdges3 } = deleteNodesAndEdges(newEdges2, newNodes2, viewDetailId);
-              const temp: string[] = node.id.split(" ");
-              const generalNodes = generateGeneralNodes(temp[temp.length - 1]);
-              const generalEdges = generateEdges(node.id, generalNodes);
-              updateNodesAndEdges([...newNodes3, ...generalNodes], [...newEdges3, ...generalEdges]);
-              toggleMeal(undefined);
-            }
-          }
+          // } else {
+          //   if (isObjectInArrayByProperty(edges, "source", node.id)) {
+          //     const { newNodes: newNodes1, newEdges: newEdges1 } = deleteNodesAndEdges(edges, nodes, viewIngredientId);
+          //     const { newNodes: newNodes2, newEdges: newEdges2 } = deleteNodesAndEdges(newEdges1, newNodes1, viewTagId);
+          //     const { newNodes: newNodes3, newEdges: newEdges3 } = deleteNodesAndEdges(newEdges2, newNodes2, viewDetailId);
+          //     updateNodesAndEdges(newNodes3, newEdges3);
+          //     toggleMeal(undefined);
+          //   } else {
+          //     const { newNodes: newNodes1, newEdges: newEdges1 } = deleteNodesAndEdges(edges, nodes, viewIngredientId);
+          //     const { newNodes: newNodes2, newEdges: newEdges2 } = deleteNodesAndEdges(newEdges1, newNodes1, viewTagId);
+          //     const { newNodes: newNodes3, newEdges: newEdges3 } = deleteNodesAndEdges(newEdges2, newNodes2, viewDetailId);
+          //     const temp: string[] = node.id.split(" ");
+          //     const generalNodes = generateGeneralNodes(temp[temp.length - 1]);
+          //     const generalEdges = generateEdges(node.id, generalNodes);
+          //     updateNodesAndEdges([...newNodes3, ...generalNodes], [...newEdges3, ...generalEdges]);
+          //     toggleMeal(undefined);
+          //   }
+          // }
         } else if (node.id.includes(viewTagId)) {
-          if (!isObjectInArrayByProperty(nodes, "id", tagId)) {
+          // if (!isObjectInArrayByProperty(nodes, "id", tagId)) {
             const temp: string[] = node.id.split(" ");
             const meal = await queryMeal(temp[temp.length - 1]);
             if (meal) {
@@ -205,13 +205,13 @@ const FoodFlow = ({ toggleMeal }: { toggleMeal: (id?: string) => void }) => {
               else
                 warningToast("No tags were found for this meal!!");
             }
-          } else {
-            const { newNodes, newEdges } = deleteNodesAndEdges(edges, nodes, tagId);
-            updateNodesAndEdges(newNodes, newEdges);
-            toggleMeal(undefined);
-          }
+          // } else {
+          //   const { newNodes, newEdges } = deleteNodesAndEdges(edges, nodes, tagId);
+          //   updateNodesAndEdges(newNodes, newEdges);
+          //   toggleMeal(undefined);
+          // }
         } else if (node.id.includes(viewIngredientId)) {
-          if (!isObjectInArrayByProperty(nodes, "id", ingredientId)) {
+          // if (!isObjectInArrayByProperty(nodes, "id", ingredientId)) {
             const temp: string[] = node.id.split(" ");
             const meal = await queryMeal(temp[temp.length - 1]);
             if (meal) {
@@ -223,14 +223,31 @@ const FoodFlow = ({ toggleMeal }: { toggleMeal: (id?: string) => void }) => {
               else
                 warningToast("No Ingredient were found for this meal!!");
             }
-          } else {
-            const { newNodes, newEdges } = deleteNodesAndEdges(edges, nodes, ingredientId);
-            updateNodesAndEdges(newNodes, newEdges);
-            toggleMeal(undefined);
-          }
+          // } else {
+          //   const { newNodes, newEdges } = deleteNodesAndEdges(edges, nodes, ingredientId);
+          //   updateNodesAndEdges(newNodes, newEdges);
+          //   toggleMeal(undefined);
+          // }
         } else if (node.id.includes(viewDetailId)) {
           const temp: string[] = node.id.split(" ");
           toggleMeal(temp[temp.length - 1])
+        } else if (node.id.includes(ingredientId)) {
+          // if (!isObjectInArrayByProperty(nodes, "id", mealId)) {
+            const meal = await queryMealFilteredByIngredient(node?.data?.label as string  || "");
+            if (meal) {
+              const mealNodes = convertMealsToNodes(meal);
+              mealNodes.splice(5);
+              const mealEdges = generateEdges(node.id, mealNodes);
+              if (mealEdges.length > 0)
+                updateNodesAndEdges([...nodes, ...mealNodes], [...edges, ...mealEdges]);
+              else
+                warningToast("No Meal were found for this ingredient!!");
+            }
+          // } else {
+          //   const { newNodes, newEdges } = deleteNodesAndEdges(edges, nodes, ingredientId);
+          //   updateNodesAndEdges(newNodes, newEdges);
+          //   toggleMeal(undefined);
+          // }
         }
       } catch (err) {
         errorToast(err as string)

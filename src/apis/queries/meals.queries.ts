@@ -1,12 +1,20 @@
 import { queryOptions, useQuery} from "@tanstack/react-query";
 import { HTTPOptions } from "../../types";
 import { queryClient } from "../../main";
-import { fetchMeal, fetchMealsFilteredByCategory } from "../requests/meals.request";
+import { fetchMeal, fetchMealsFilteredByCategory, fetchMealsFilteredByIngredient } from "../requests/meals.request";
 
 export function mealFilteredByCategoryOptions(c:string,options?: HTTPOptions) {
   return queryOptions({
     queryKey: ["meals",c],
     queryFn: () => fetchMealsFilteredByCategory(c,options),
+    staleTime: 120* 1000,
+  });
+}
+
+export function mealFilteredByIngredientOptions(c:string,options?: HTTPOptions) {
+  return queryOptions({
+    queryKey: ["ingredients",c],
+    queryFn: () => fetchMealsFilteredByIngredient(c,options),
     staleTime: 120* 1000,
   });
 }
@@ -28,6 +36,16 @@ export const queryMealFilteredByCategory = async (c:string) => {
     return data;
   } catch (err) {
     throw "Error Filtering Meal by this Category!!"
+  }
+};
+
+
+export const queryMealFilteredByIngredient = async (c:string) => {
+  try {
+    const data = await queryClient.fetchQuery(mealFilteredByIngredientOptions(c));
+    return data;
+  } catch (err) {
+    throw "Error Filtering Meal by this Ingredient!!"
   }
 };
 
