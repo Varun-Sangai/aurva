@@ -8,6 +8,8 @@ let edgeCount = 0;
 let categoryCount = 0;
 // Meal Count
 let mealCount = 0;
+// Meal Level Count
+let mealLevelCount = 0;
 // Ingredient Count
 let ingredientCount = 0;
 // Tag Count
@@ -20,6 +22,12 @@ let viewMealCount = 0;
 let viewIngredientCount = 0;
 // View Tag Count
 let viewTagCount = 0;
+
+
+export const setMealLevelCount=(value:number)=>{
+  mealLevelCount=value;
+}
+
 
 // Function to convert Category array to nodes array
 export const convertCategoriesToNodes = (
@@ -44,10 +52,12 @@ export const convertCategoriesToNodes = (
 // Function to convert Meal array to nodes array
 export const convertMealsToNodes = (meals?: PartialMeal[]): GraphNode[] => {
   if (meals) {
+    mealLevelCount += 1;
+    console.log(mealLevelCount);
     return meals.map((meal) => {
       mealCount += 1;
       return {
-        id: mealId+` ${mealCount} ` + meal.idMeal,
+        id: mealId+`-${mealLevelCount}`+` ${mealCount} ` + meal.idMeal,
         data: {
           label: meal.strMeal, // Use strMeal as the label
         },
@@ -62,11 +72,10 @@ export const convertMealsToNodes = (meals?: PartialMeal[]): GraphNode[] => {
 // Function to generate  tag nodes array
 export const generateTagNodes = (meal: Meal): GraphNode[] => {
   let tagNodes: GraphNode[] = [];
-
   meal?.strTags?.split(",").map((tag, _index) => {
       tagCount += 1;
       tagNodes.push({
-        id: tagId + ` ${tagCount} ` + `${meal.idMeal}`,
+        id: tagId +`-${mealLevelCount}`+ ` ${tagCount} ` + `${meal.idMeal}`,
         data: {
           label:tag,
         },
@@ -85,7 +94,7 @@ export const generateIngredientNodes = (meal: Meal): GraphNode[] => {
     if (key.toLowerCase().includes("ingredient") && Boolean(meal[key as keyof Meal]?.trim())) {
       ingredientCount += 1;
       ingredient.push({
-        id: ingredientId + ` ${ingredientCount} ` + `${meal.idMeal}`,
+        id: ingredientId+`-${mealLevelCount}`+ ` ${ingredientCount} ` + `${meal.idMeal}`,
         data: {
           label: meal[key as keyof Meal],
         },
@@ -104,7 +113,7 @@ export const generateGeneralNodes = (source: string): GraphNode[] => {
   viewDetailCount += 1;
   return [
     {
-      id: viewIngredientId + ` ${viewIngredientCount} ` + `${source}`,
+      id: viewIngredientId+`-${mealLevelCount}`+ ` ${viewIngredientCount} ` + `${source}`,
       data: {
         label: "View Ingredients",
       },
@@ -112,7 +121,7 @@ export const generateGeneralNodes = (source: string): GraphNode[] => {
       type: "view",
     },
     {
-      id: viewTagId + ` ${viewTagCount} ` + `${source}`,
+      id: viewTagId+`-${mealLevelCount}` + ` ${viewTagCount} ` + `${source}`,
       data: {
         label: "View Tags",
       },
@@ -120,7 +129,7 @@ export const generateGeneralNodes = (source: string): GraphNode[] => {
       type: "view",
     },
     {
-      id: viewDetailId + ` ${viewDetailCount} ` + `${source}`,
+      id: viewDetailId+`-${mealLevelCount}` + ` ${viewDetailCount} ` + `${source}`,
       data: {
         label: "View Details",
       },
@@ -180,22 +189,3 @@ export const generateEdges = (source: string, nodes?: GraphNode[]): Edge[] => {
   }
   return [];
 };
-
-// Function to delete edges and nodes
-// export const deleteEdges = (source:string,edges:Edges[],nodes:GraphNode[]): {edges:Edge[],nodes:GraphNode[]} => {
-//   let newEdges:Edge[] = [];
-//   let newNodes:GraphNode[] =[];
-//   if (edges){
-//     edges.map()
-// nodes.map((node) => {
-//   edgeCount += 1;
-//   return {
-//     id: 'edge' + edgeCount,
-//     source: source,
-//     target: node.id,
-//     ...edgeConfig
-//   }
-// });
-//   }
-//   return {edges:[],nodes:[]};
-// };
